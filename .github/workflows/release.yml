@@ -1,0 +1,77 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build-plugin:
+    name: Build ServerAdditions plugin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: mvn -B clean package
+        working-directory: plugin
+      - name: Rename plugin JAR
+        run: mv plugin/target/server-additions-2.0.0.jar plugin/target/ServerAdditions-plugin.jar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: server-additions-plugin
+          path: plugin/target/ServerAdditions-plugin.jar
+
+  build-cli:
+    name: Build StartServer CLI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Package CLI
+        run: |
+          mkdir -p package
+          cp -r dist/ package/dist/
+          cp package.json package/
+          cp README.md package/
+          cd package
+          npm install --production
+          cd ..
+          tar -czf startserver-cli.tar.gz -C package .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: startserver-cli
+          path: startserver-cli.tar.gz
+
+  release:
+    name: Create GitHub release
+    needs: [build-plugin, build-cli]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          body: |
+            ## Pliki do pobrania
+
+            | Plik | Opis |
+            |------|------|
+            | `ServerAdditions-plugin.jar` | Plugin ServerAdditions do wrzucenia do folderu plugins na serwerze |
+            | `startserver-cli.tar.gz` | Narzedzie CLI StartServer do konfiguracji serwera |
+          files: |
+            artifacts/server-additions-plugin/ServerAdditions-plugin.jar
+            artifacts/startserver-cli/startserver-cli.tar.gz

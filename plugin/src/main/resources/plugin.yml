@@ -1,0 +1,170 @@
+name: ServerAdditions
+version: 2.0.0
+main: com.startserver.additions.ServerAdditions
+api-version: '1.20'
+author: StartServer
+description: Comprehensive server management plugin with toggleable features
+
+softdepend: [Vault, PlaceholderAPI]
+
+commands:
+  serveradditions:
+    description: Main ServerAdditions command
+    usage: /serveradditions [reload|info]
+    aliases: [sa, additions]
+    permission: serveradditions.admin
+  
+  rtp:
+    description: Random teleport
+    usage: /rtp
+    permission: serveradditions.rtp
+  
+  spawn:
+    description: Teleport to spawn
+    usage: /spawn
+    permission: serveradditions.spawn
+  
+  setspawn:
+    description: Set spawn location
+    usage: /setspawn
+    permission: serveradditions.setspawn
+  
+  home:
+    description: Teleport to home
+    usage: /home [name]
+    permission: serveradditions.home
+  
+  sethome:
+    description: Set home location
+    usage: /sethome [name]
+    permission: serveradditions.sethome
+  
+  delhome:
+    description: Delete home
+    usage: /delhome [name]
+    permission: serveradditions.delhome
+  
+  homes:
+    description: List homes
+    usage: /homes
+    permission: serveradditions.homes
+  
+  tpa:
+    description: Request teleport to player
+    usage: /tpa <player>
+    permission: serveradditions.tpa
+  
+  tpaccept:
+    description: Accept teleport request
+    usage: /tpaccept
+    permission: serveradditions.tpa
+  
+  tpdeny:
+    description: Deny teleport request
+    usage: /tpdeny
+    permission: serveradditions.tpa
+  
+  warp:
+    description: Teleport to warp
+    usage: /warp [name]
+    permission: serveradditions.warp
+  
+  setwarp:
+    description: Set warp location
+    usage: /setwarp <name>
+    permission: serveradditions.setwarp
+  
+  delwarp:
+    description: Delete warp
+    usage: /delwarp <name>
+    permission: serveradditions.delwarp
+  
+  warps:
+    description: List warps
+    usage: /warps
+    permission: serveradditions.warps
+  
+  seen:
+    description: Check when player was last online
+    usage: /seen <player>
+    permission: serveradditions.seen
+  
+  invsee:
+    description: View player inventory
+    usage: /invsee <player>
+    permission: serveradditions.invsee
+  
+  enderchest:
+    description: Open enderchest
+    usage: /enderchest [player]
+    aliases: [ec]
+    permission: serveradditions.enderchest
+  
+  workbench:
+    description: Open crafting table
+    usage: /workbench
+    aliases: [wb, craft]
+    permission: serveradditions.workbench
+  
+  balance:
+    description: Check balance
+    usage: /balance [player]
+    aliases: [bal, money]
+    permission: serveradditions.balance
+  
+  pay:
+    description: Pay another player
+    usage: /pay <player> <amount>
+    permission: serveradditions.pay
+  
+  hearts:
+    description: View hearts in lifesteal
+    usage: /hearts
+    permission: serveradditions.hearts
+
+permissions:
+  serveradditions.admin:
+    default: op
+    description: Full admin access
+    children:
+      serveradditions.reload: true
+      serveradditions.setspawn: true
+      serveradditions.setwarp: true
+      serveradditions.delwarp: true
+      serveradditions.invsee: true
+      serveradditions.seen: true
+  
+  serveradditions.*:
+    default: op
+    description: All permissions
+    children:
+      serveradditions.rtp: true
+      serveradditions.spawn: true
+      serveradditions.home: true
+      serveradditions.sethome: true
+      serveradditions.delhome: true
+      serveradditions.homes: true
+      serveradditions.tpa: true
+      serveradditions.warp: true
+      serveradditions.enderchest: true
+      serveradditions.workbench: true
+      serveradditions.balance: true
+      serveradditions.pay: true
+      serveradditions.hearts: true
+      serveradditions.admin: true
+  
+  serveradditions.default:
+    default: true
+    description: Default player permissions
+    children:
+      serveradditions.spawn: true
+      serveradditions.home: true
+      serveradditions.sethome: true
+      serveradditions.delhome: true
+      serveradditions.homes: true
+      serveradditions.tpa: true
+      serveradditions.tpaccept: true
+      serveradditions.tpdeny: true
+      serveradditions.balance: true
+      serveradditions.pay: true
+      serveradditions.hearts: true

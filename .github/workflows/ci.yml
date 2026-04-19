@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-node:
+    name: Build Node.js app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+
+  build-plugin:
+    name: Build Java plugin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Build with Maven
+        run: mvn -B clean package
+        working-directory: plugin
+      - uses: actions/upload-artifact@v4
+        with:
+          name: server-additions-plugin
+          path: plugin/target/server-additions-2.0.0.jar

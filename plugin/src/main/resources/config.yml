@@ -1,0 +1,319 @@
+# ServerAdditions v2.0.0 - Konfiguracja
+# Wszystkie funkcje można włączać/wyłączać niezależnie
+
+# =============================================================================
+# USTAWIENIA GŁÓWNE
+# =============================================================================
+core:
+  # Włącz debugowanie w konsoli
+  debug: false
+  # Interwał auto-zapisu w minutach (0 = wyłączone)
+  auto-save-interval: 10
+
+# =============================================================================
+# NIEWIDZIALNOŚĆ
+# =============================================================================
+invisibility:
+  # Główny przełącznik niewidzialności
+  enabled: true
+  # Ukryj cząsteczki mikstur
+  hide-particles: true
+  # Ukryj nametag nad głową
+  hide-nametag: true
+  # Ukryj z listy graczy (tab)
+  hide-from-tab: false
+  # Światy gdzie działa (puste = wszystkie)
+  worlds: []
+  # Uprawnienie do pominięcia ukrywania
+  bypass-permission: "serveradditions.invis.bypass"
+
+# =============================================================================
+# ZARZĄDZANIE PRZEDMIOTAMI
+# =============================================================================
+items:
+  # Główny przełącznik
+  enabled: true
+  
+  # Limity przedmiotów
+  limits:
+    enabled: true
+    # Przedmioty i ich maksymalna ilość
+    restricted-items:
+      ENCHANTED_GOLDEN_APPLE: 16
+      GOLDEN_APPLE: 64
+      ENDER_PEARL: 16
+      TOTEM_OF_UNDYING: 2
+    # Wiadomość przy przekroczeniu limitu
+    message: "&c» Nie możesz nosić więcej niż {limit} {item}!"
+    # Uprawnienie do pominięcia limitów
+    bypass-permission: "serveradditions.items.bypass"
+  
+  # Wyłączone przedmioty
+  disabled:
+    enabled: true
+    # Lista wyłączonych materiałów
+    items: []
+    # Wiadomość przy użyciu wyłączonego przedmiotu
+    message: "&c» Ten przedmiot jest wyłączony na tym serwerze!"
+    # Blokuj craftowanie wyłączonych przedmiotów
+    prevent-crafting: true
+
+# =============================================================================
+# SYSTEM LIFESTEAL + OSTATNI KRZYK
+# =============================================================================
+lifesteal:
+  # Włącz system serc
+  enabled: false
+  # Maksymalna liczba serc
+  max-hearts: 20
+  # Minimalna liczba serc przed śmiercią
+  min-hearts: 1
+  # Serca zdobywane za zabójstwo
+  hearts-per-kill: 1
+  # Serca tracone przy śmierci
+  hearts-lost-on-death: 1
+  # Poziomy potrzebne do zdobycia serca
+  levels-per-heart: 5
+  
+  # Skalowanie złotych jabłek
+  golden-apple:
+    # Podstawowe leczenie (w sercach)
+    base-heal: 2.0
+    # Dodatkowe leczenie za poziom
+    heal-per-level: 0.5
+  
+  # System Ostatniego Krzyku - przetrwaj przy 0 HP
+  last-stand:
+    enabled: true
+    # Czas trwania w sekundach
+    duration-seconds: 5
+    # Efekty podczas ostatniego krzyku
+    slowness-level: 2
+    weakness-level: 4
+  
+  # Przedmiot odrodzenia
+  revive:
+    enabled: true
+    # Składniki receptury (9 slotów)
+    recipe:
+      - DIAMOND_BLOCK
+      - NETHERITE_INGOT
+      - DIAMOND_BLOCK
+      - NETHERITE_INGOT
+      - BEACON
+      - NETHERITE_INGOT
+      - DIAMOND_BLOCK
+      - NETHERITE_INGOT
+      - DIAMOND_BLOCK
+
+# =============================================================================
+# TABLICA WYNIKÓW (SCOREBOARD)
+# =============================================================================
+scoreboard:
+  enabled: true
+  # Interwał aktualizacji w tickach (20 = 1 sekunda)
+  update-interval: 20
+  # Tytuł tablicy
+  title: "&6&lServerAdditions"
+  # Linie tablicy (obsługuje placeholdery)
+  lines:
+    - "&7&m----------------"
+    - "&eGracz: &f%player%"
+    - "&eŚmierci: &f%deaths%"
+    - "&eZabójstwa: &f%kills%"
+    - "&7&m----------------"
+  # Widoczna domyślnie
+  default-visible: true
+
+# =============================================================================
+# LISTA GRACZY (TAB)
+# =============================================================================
+tab:
+  enabled: true
+  # Nagłówek (obsługuje wiele linii)
+  header:
+    - "&6&m------------------------"
+    - "&eWitaj na %servername%"
+    - "&6&m------------------------"
+  # Stopka
+  footer:
+    - "&7Online: &f%online%&7/&f%max%"
+    - "&7Ping: &f%ping%ms"
+  # Interwał aktualizacji w tickach
+  update-interval: 40
+
+# =============================================================================
+# ZARZĄDZANIE SPAWNEM
+# =============================================================================
+spawn:
+  # Ochrona spawna
+  protection:
+    enabled: true
+    # Promień ochrony
+    radius: 50
+    # Wiadomość przy próbie budowy
+    message: "&c» Nie możesz budować blisko spawnu!"
+    # Bloki które można niszczyć/stawiać
+    allowed-blocks:
+      - CHEST
+      - TRAPPED_CHEST
+  
+  # Teleport na spawn
+  teleport:
+    enabled: true
+    # Cooldown w sekundach
+    cooldown: 30
+    # Opóźnienie przed teleportem (0 = natychmiast)
+    delay: 5
+    # Wiadomość podczas opóźnienia
+    delay-message: "&e» Teleportacja na spawn za {delay} sekund..."
+
+# =============================================================================
+# TELEPORTACJA
+# =============================================================================
+teleport:
+  # Losowy teleport (RTP)
+  random:
+    enabled: false
+    # Maksymalna odległość od spawna
+    max-distance: 10000
+    # Minimalna odległość od spawna
+    min-distance: 500
+    # Cooldown w sekundach
+    cooldown: 300
+    # Koszt (jeśli ekonomia włączona)
+    cost: 0
+  
+  # Domy - TYLKO JEDEN DOM
+  homes:
+    enabled: true
+    # Tylko 1 dom dozwolony
+    max-homes: 1
+    # Cooldown w sekundach
+    cooldown: 10
+
+# =============================================================================
+# CZAT
+# =============================================================================
+chat:
+  # Formatowanie czatu
+  enabled: true
+  # Format czatu (obsługuje placeholdery)
+  format: "&7[%prefix%&7] &f%player%&7: &f%message%"
+  # Anti-spam
+  anti-spam:
+    enabled: true
+    # Cooldown między wiadomościami w sekundach
+    cooldown: 2
+    # Blokuj powtarzające się wiadomości
+    block-repeat: true
+  # Filtr czatu
+  filter:
+    enabled: false
+    # Blokowane słowa
+    blocked-words: []
+    # Zamień na
+    replacement: "***"
+
+# =============================================================================
+# WALKI
+# =============================================================================
+combat:
+  # Zapobieganie wylogowywaniu podczas walki
+  log-prevention:
+    enabled: false
+    # Czas oznaczenia w walce w sekundach
+    duration: 30
+    # Komendy zablokowane w walce
+    blocked-commands:
+      - spawn
+      - home
+      - warp
+      - rtp
+    # Kara za wylogowanie
+    punishment: KILL
+  
+  # Wskaźniki walki
+  indicators:
+    enabled: true
+    # Pokazuj liczby obrażeń
+    damage-numbers: true
+    # Dźwięk przy trafieniu
+    hit-sound: true
+
+# =============================================================================
+# KOMENDY
+# =============================================================================
+commands:
+  rtp: true
+  spawn: true
+  setspawn: true
+  home: true
+  tpa: true
+  warp: true
+  seen: true
+  invsee: true
+  enderchest: true
+  workbench: true
+
+# =============================================================================
+# EKONOMIA
+# =============================================================================
+economy:
+  enabled: false
+  # Początkowe saldo
+  starting-balance: 100
+  # Symbol waluty
+  symbol: "$"
+  # Komenda /pay
+  pay-command: true
+  # Komenda /balance
+  balance-command: true
+
+# =============================================================================
+# WYDAJNOŚĆ
+# =============================================================================
+performance:
+  # Limiter mobów
+  entity-limiter:
+    enabled: false
+    # Maksymalna liczba mobów na chunk
+    max-mobs-per-chunk: 25
+    # Maksymalna liczba zwierząt na chunk
+    max-animals-per-chunk: 15
+    # Interwał czyszczenia dropów (minuty, 0 = wyłączone)
+    clear-drops-interval: 10
+  
+  # Limiter redstone
+  redstone-limiter:
+    enabled: false
+    # Maksymalna liczba aktualizacji redstone na tick
+    max-updates: 1000
+
+# =============================================================================
+# ŚWIATY
+# =============================================================================
+worlds:
+  # Granica świata
+  border:
+    enabled: false
+    # Rozmiar granicy (promień)
+    size: 10000
+    # Środek X
+    center-x: 0
+    # Środek Z
+    center-z: 0
+    # Ostrzegaj graczy blisko granicy
+    warning-distance: 100
+  
+  # Kontrola pogody
+  weather:
+    enabled: false
+    # Zablokowana pogoda (CLEAR, RAIN, THUNDER)
+    locked-weather: null
+  
+  # Kontrola czasu
+  time:
+    enabled: false
+    # Zablokowany czas (DAY, NIGHT, lub null)
+    locked-time: null

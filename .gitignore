@@ -1,0 +1,8 @@
+node_modules/
+dist/
+server/
+*.jar
+.env
+plugin/target/
+plugin/.idea/
+*.iml
