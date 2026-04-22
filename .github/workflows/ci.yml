@@ -47,7 +47,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
+          token: ${{ secrets.NPM_TOKEN }}
       - run: npm ci
       - run: npm run build
-      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
       - run: npm publish --access public
