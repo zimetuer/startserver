@@ -341,7 +341,7 @@ worlds:
 
 // Pre-built plugin JAR path (relative to dist folder)
 import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { dirname } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const PLUGIN_JAR_PATH = join(__dirname, '..', 'plugin', 'server-additions-2.0.0.jar');

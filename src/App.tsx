@@ -14,11 +14,47 @@ import { RamConfig } from './steps/RamConfig.js';
 import { Review } from './steps/Review.js';
 import { Generating } from './steps/Generating.js';
 import { WorldBorderConfigStep } from './steps/WorldBorderConfig.js';
+import type { TabId } from './components/Layout.js';
 import type { ServerConfig, Step, Plugin, Template, VoiceChatConfig, BedrockConfig, CustomAdditionsConfig, WorldBorderConfig } from './types.js';
+
+const TAB_STEP_MAP: Record<TabId, Step> = {
+  podstawowe: 'directory',
+  funkcje: 'voicechat',
+  pluginy: 'plugin',
+  ustawienia: 'config',
+  podsumowanie: 'review',
+};
 
 export function App() {
   const [step, setStep] = useState<Step>('welcome');
   const [config, setConfig] = useState<Partial<ServerConfig>>({});
+
+  const STEP_TAB_MAP: Record<Step, TabId | null> = {
+    welcome: null,
+    directory: 'podstawowe',
+    version: 'podstawowe',
+    engine: 'podstawowe',
+    template: 'podstawowe',
+    voicechat: 'funkcje',
+    bedrock: 'funkcje',
+    additions: 'funkcje',
+    plugin: 'pluginy',
+    config: 'ustawienia',
+    worldborder: 'ustawienia',
+    ram: 'ustawienia',
+    review: 'podsumowanie',
+    generating: 'podsumowanie',
+  };
+
+  const currentTab = STEP_TAB_MAP[step];
+  const currentTabIndex = currentTab
+    ? ['podstawowe', 'funkcje', 'pluginy', 'ustawienia', 'podsumowanie'].indexOf(currentTab)
+    : -1;
+
+  const handleTabClick = (tabId: TabId) => {
+    const targetStep = TAB_STEP_MAP[tabId];
+    if (targetStep) setStep(targetStep);
+  };
 
   const handleDirectory = (directory: string) => { setConfig(p => ({ ...p, directory })); setStep('version'); };
   const handleVersion = (version: string) => { setConfig(p => ({ ...p, version })); setStep('engine'); };
@@ -89,9 +125,9 @@ export function App() {
     setStep('plugin');
   };
   const handlePlugins = (plugins: Plugin[]) => { setConfig(p => ({ ...p, plugins })); setStep('config'); };
-const handleConfig = (serverConfig: Partial<ServerConfig>) => { setConfig(p => ({ ...p, ...serverConfig })); setStep('worldborder'); };
-const handleWorldBorder = (worldBorder: WorldBorderConfig) => { setConfig(p => ({ ...p, worldBorder })); setStep('ram'); };
-const handleRam = (ramGb: number) => { setConfig(p => ({ ...p, ramGb })); setStep('review'); };
+  const handleConfig = (serverConfig: Partial<ServerConfig>) => { setConfig(p => ({ ...p, ...serverConfig })); setStep('worldborder'); };
+  const handleWorldBorder = (worldBorder: WorldBorderConfig) => { setConfig(p => ({ ...p, worldBorder })); setStep('ram'); };
+  const handleRam = (ramGb: number) => { setConfig(p => ({ ...p, ramGb })); setStep('review'); };
   const handleGenerate = () => { setStep('generating'); };
   const handleComplete = () => { process.exit(0); };
 
@@ -105,26 +141,28 @@ const handleRam = (ramGb: number) => { setConfig(p => ({ ...p, ramGb })); setSte
     if (prevStep) setStep(prevStep);
   };
 
+  const tabClickHandler = currentTab ? handleTabClick : undefined;
+
   return (
     <Box flexDirection="column">
       {step === 'welcome' && <Welcome onNext={() => setStep('directory')} />}
-      {step === 'directory' && <DirectorySelect onNext={handleDirectory} />}
-      {step === 'version' && <VersionSelect onNext={handleVersion} onBack={() => goBack('version')} />}
-      {step === 'engine' && config.version && <EngineSelect version={config.version} onNext={handleEngine} onBack={() => goBack('engine')} />}
-      {step === 'template' && <TemplateSelect onNext={handleTemplate} onBack={() => goBack('template')} />}
-      {step === 'voicechat' && <VoiceChatSelect onNext={handleVoiceChat} onBack={() => goBack('voicechat')} onSkip={handleSkipVoiceChat} />}
-      {step === 'bedrock' && <BedrockSelect onlineMode={config.onlineMode ?? true} onNext={handleBedrock} onBack={() => goBack('bedrock')} onSkip={handleSkipBedrock} />}
-      {step === 'additions' && <AdditionsSelect onNext={handleAdditions} onBack={() => goBack('additions')} onSkip={handleSkipAdditions} />}
+      {step === 'directory' && <DirectorySelect onNext={handleDirectory} onTabClick={tabClickHandler} />}
+      {step === 'version' && <VersionSelect onNext={handleVersion} onBack={() => goBack('version')} onTabClick={tabClickHandler} />}
+      {step === 'engine' && config.version && <EngineSelect version={config.version} onNext={handleEngine} onBack={() => goBack('engine')} onTabClick={tabClickHandler} />}
+      {step === 'template' && <TemplateSelect onNext={handleTemplate} onBack={() => goBack('template')} onTabClick={tabClickHandler} />}
+      {step === 'voicechat' && <VoiceChatSelect onNext={handleVoiceChat} onBack={() => goBack('voicechat')} onSkip={handleSkipVoiceChat} onTabClick={tabClickHandler} />}
+      {step === 'bedrock' && <BedrockSelect onlineMode={config.onlineMode ?? true} onNext={handleBedrock} onBack={() => goBack('bedrock')} onSkip={handleSkipBedrock} onTabClick={tabClickHandler} />}
+      {step === 'additions' && <AdditionsSelect onNext={handleAdditions} onBack={() => goBack('additions')} onSkip={handleSkipAdditions} onTabClick={tabClickHandler} />}
       {step === 'plugin' && config.version && config.engine && config.template && (
         <PluginSelect version={config.version} engine={config.engine} template={config.template}
           voiceChat={config.voiceChat ?? { enabled: false, type: null }}
           bedrock={config.bedrock ?? { enabled: false, geyser: false, floodgate: false }}
           rtpEnabled={config.rtpEnabled ?? false} homesEnabled={config.homesEnabled ?? false} teamsEnabled={config.teamsEnabled ?? false}
-          onNext={handlePlugins} onBack={() => goBack('plugin')} />
+          onNext={handlePlugins} onBack={() => goBack('plugin')} onTabClick={tabClickHandler} />
       )}
-      {step === 'config' && config.template && <ServerConfigStep template={config.template} onNext={handleConfig} onBack={() => goBack('config')} />}
-      {step === 'worldborder' && <WorldBorderConfigStep onNext={handleWorldBorder} onBack={() => goBack('worldborder')} />}
-      {step === 'ram' && <RamConfig maxPlayers={config.maxPlayers || 20} onNext={handleRam} onBack={() => goBack('ram')} />}
+      {step === 'config' && config.template && <ServerConfigStep template={config.template} onNext={handleConfig} onBack={() => goBack('config')} onTabClick={tabClickHandler} />}
+      {step === 'worldborder' && <WorldBorderConfigStep onNext={handleWorldBorder} onBack={() => goBack('worldborder')} onTabClick={tabClickHandler} />}
+      {step === 'ram' && <RamConfig maxPlayers={config.maxPlayers || 20} onNext={handleRam} onBack={() => goBack('ram')} onTabClick={tabClickHandler} />}
       {step === 'review' && isCompleteConfig(config) && <Review config={config as ServerConfig} onNext={handleGenerate} onBack={() => goBack('review')} />}
       {step === 'generating' && isCompleteConfig(config) && <Generating config={config as ServerConfig} onComplete={handleComplete} />}
     </Box>

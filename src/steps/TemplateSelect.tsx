@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
-import { Layout } from '../components/Layout.js';
+import { Layout, type TabId } from '../components/Layout.js';
 import type { Template } from '../types.js';
 
 interface TemplateSelectProps {
   onNext: (template: Template) => void;
   onBack: () => void;
+  onTabClick?: (tabId: TabId) => void;
 }
 
 const templates = [
@@ -14,7 +15,7 @@ const templates = [
   { id: 'full' as Template, name: 'Pełny', desc: 'TAB, Scoreboard, RTP, Domy, Drużyny', color: 'green' },
 ];
 
-export function TemplateSelect({ onNext, onBack }: TemplateSelectProps) {
+export function TemplateSelect({ onNext, onBack, onTabClick }: TemplateSelectProps) {
   const [selected, setSelected] = useState(0);
 
   useInput((input, key) => {
@@ -27,7 +28,7 @@ export function TemplateSelect({ onNext, onBack }: TemplateSelectProps) {
   });
 
   return (
-    <Layout title="wybierz szablon" step={4} totalSteps={9}>
+    <Layout title="wybierz szablon" step={4} totalSteps={12} tab="podstawowe" onTabClick={onTabClick}>
       <Box flexDirection="column" marginTop={1}>
         <Text color="white" bold>Wybierz szablon serwera:</Text>
         <Box marginTop={1} />

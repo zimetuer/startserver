@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
-import { Layout } from '../components/Layout.js';
+import { Layout, type TabId } from '../components/Layout.js';
 
 interface ServerConfigProps {
   template: string;
   onNext: (config: Record<string, any>) => void;
   onBack: () => void;
+  onTabClick?: (tabId: TabId) => void;
 }
 
 const fields = [
@@ -23,7 +24,7 @@ const fields = [
   { key: 'opPlayer', label: 'Gracz OP (opcjonalnie)', default: '', type: 'text' },
 ];
 
-export function ServerConfigStep({ template, onNext, onBack }: ServerConfigProps) {
+export function ServerConfigStep({ template, onNext, onBack, onTabClick }: ServerConfigProps) {
   const [current, setCurrent] = useState(0);
   const [values, setValues] = useState<Record<string, any>>({});
   const [input, setInput] = useState('');
@@ -99,7 +100,7 @@ export function ServerConfigStep({ template, onNext, onBack }: ServerConfigProps
   // Confirmation screen
   if (confirmMode) {
     return (
-      <Layout title="konfiguracja serwera" step={7} totalSteps={10}>
+      <Layout title="konfiguracja serwera" step={9} totalSteps={12} tab="ustawienia" onTabClick={onTabClick}>
         <Box flexDirection="column" marginTop={2}>
           <Text color="gray">Pole {current + 1}/{fields.length}</Text>
           <Box marginTop={1} />
@@ -123,7 +124,7 @@ export function ServerConfigStep({ template, onNext, onBack }: ServerConfigProps
 
   // Input screen
   return (
-    <Layout title="konfiguracja serwera" step={7} totalSteps={10}>
+    <Layout title="konfiguracja serwera" step={9} totalSteps={12} tab="ustawienia" onTabClick={onTabClick}>
       <Box flexDirection="column" marginTop={2}>
         <Text color="gray">Pole {current + 1}/{fields.length}</Text>
         <Box marginTop={1} />

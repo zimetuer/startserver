@@ -133,6 +133,8 @@ export interface ModrinthVersion {
   id: string;
   project_id: string;
   version_number: string;
+  game_versions: string[];
+  loaders: string[];
   files: Array<{
     url: string;
     filename: string;

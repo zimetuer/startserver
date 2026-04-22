@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
-import { Layout } from '../components/Layout.js';
+import { Layout, type TabId } from '../components/Layout.js';
 import { getCompatibleEngines } from '../api/mcutils.js';
 
 interface EngineSelectProps {
   version: string;
   onNext: (engine: string) => void;
   onBack: () => void;
+  onTabClick?: (tabId: TabId) => void;
 }
 
-export function EngineSelect({ version, onNext, onBack }: EngineSelectProps) {
+export function EngineSelect({ version, onNext, onBack, onTabClick }: EngineSelectProps) {
   const engines = getCompatibleEngines(version);
   const [selected, setSelected] = useState(0);
 
@@ -23,7 +24,7 @@ export function EngineSelect({ version, onNext, onBack }: EngineSelectProps) {
   });
 
   return (
-    <Layout title="wybierz silnik" step={3} totalSteps={9}>
+    <Layout title="wybierz silnik" step={3} totalSteps={12} tab="podstawowe" onTabClick={onTabClick}>
       <Box flexDirection="column" marginTop={1}>
         <Text color="white" bold>Wybierz silnik serwera dla Minecraft {version}:</Text>
         <Box marginTop={1} />

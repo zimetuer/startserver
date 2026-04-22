@@ -1,12 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import {
-  getVanillaJarUrl,
   getPaperJarUrl,
   getFoliaJarUrl,
   getPurpurJarUrl,
-  getFabricJarUrl,
-  getForgeJarUrl,
-  getNeoForgeJarUrl,
   getSpigotJarUrl,
   getServerJarUrl,
   validateJarUrl,
@@ -15,14 +11,6 @@ import {
 const VERSION = '1.20.4';
 
 describe('URL generation', () => {
-  it('vanilla generates mcutils URL', async () => {
-    const result = await getVanillaJarUrl(VERSION);
-    expect(result.url).toContain('mcutils.com');
-    expect(result.url).toContain('vanilla');
-    expect(result.url).toContain(VERSION);
-    expect(result.filename).toBe(`vanilla-${VERSION}.jar`);
-  });
-
   it('paper generates PaperMC API URL with build info', async () => {
     const result = await getPaperJarUrl(VERSION);
     expect(result.url).toContain('api.papermc.io');
@@ -48,30 +36,6 @@ describe('URL generation', () => {
     expect(result.filename).toMatch(/\.jar$/);
   });
 
-  it('fabric generates mcutils URL', async () => {
-    const result = await getFabricJarUrl(VERSION);
-    expect(result.url).toContain('mcutils.com');
-    expect(result.url).toContain('fabric');
-    expect(result.url).toContain(VERSION);
-    expect(result.filename).toBe(`fabric-${VERSION}.jar`);
-  });
-
-  it('forge generates mcutils URL', async () => {
-    const result = await getForgeJarUrl(VERSION);
-    expect(result.url).toContain('mcutils.com');
-    expect(result.url).toContain('forge');
-    expect(result.url).toContain(VERSION);
-    expect(result.filename).toBe(`forge-${VERSION}.jar`);
-  });
-
-  it('neoforge generates mcutils URL', async () => {
-    const result = await getNeoForgeJarUrl(VERSION);
-    expect(result.url).toContain('mcutils.com');
-    expect(result.url).toContain('neoforge');
-    expect(result.url).toContain(VERSION);
-    expect(result.filename).toBe(`neoforge-${VERSION}.jar`);
-  });
-
   it('spigot generates GetBukkit CDN URL (not mcutils)', async () => {
     const result = await getSpigotJarUrl(VERSION);
     expect(result.url).toContain('cdn.getbukkit.org');
@@ -81,7 +45,7 @@ describe('URL generation', () => {
   });
 
   it('getServerJarUrl dispatches to correct engine', async () => {
-    const engines = ['vanilla', 'paper', 'folia', 'purpur', 'fabric', 'forge', 'neoforge', 'spigot'] as const;
+    const engines = ['paper', 'folia', 'purpur', 'spigot'] as const;
     for (const engine of engines) {
       const result = await getServerJarUrl(engine, VERSION);
       expect(result.url).toBeTruthy();
@@ -91,6 +55,13 @@ describe('URL generation', () => {
 
   it('getServerJarUrl throws for unknown engine', async () => {
     await expect(getServerJarUrl('unknown', VERSION)).rejects.toThrow('Nieznany silnik');
+  });
+
+  it('getServerJarUrl throws for removed engines', async () => {
+    await expect(getServerJarUrl('vanilla', VERSION)).rejects.toThrow('Nieznany silnik');
+    await expect(getServerJarUrl('fabric', VERSION)).rejects.toThrow('Nieznany silnik');
+    await expect(getServerJarUrl('forge', VERSION)).rejects.toThrow('Nieznany silnik');
+    await expect(getServerJarUrl('neoforge', VERSION)).rejects.toThrow('Nieznany silnik');
   });
 });
 
@@ -109,20 +80,8 @@ describe('Folia URL fix', () => {
 });
 
 describe('Download URL validation (integration)', () => {
-  it('vanilla download URL is accessible', async () => {
-    const { url } = await getVanillaJarUrl(VERSION);
-    const valid = await validateJarUrl(url);
-    expect(valid).toBe(true);
-  }, 30000);
-
   it('paper download URL is accessible', async () => {
     const { url } = await getPaperJarUrl(VERSION);
-    const valid = await validateJarUrl(url);
-    expect(valid).toBe(true);
-  }, 30000);
-
-  it('fabric download URL is accessible', async () => {
-    const { url } = await getFabricJarUrl(VERSION);
     const valid = await validateJarUrl(url);
     expect(valid).toBe(true);
   }, 30000);
@@ -156,10 +115,4 @@ describe('validateJarUrl', () => {
     const valid = await validateJarUrl('https://mcutils.com/api/server-jars/vanilla/0.0.0/download');
     expect(valid).toBe(false);
   });
-
-  it('returns true for valid URL', async () => {
-    const { url } = await getVanillaJarUrl(VERSION);
-    const valid = await validateJarUrl(url);
-    expect(valid).toBe(true);
-  }, 30000);
 });

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
-import { Layout } from '../components/Layout.js';
+import { Layout, type TabId } from '../components/Layout.js';
 import type { WorldBorderConfig, WorldBorderPreset } from '../types.js';
 
 interface WorldBorderConfigProps {
   onNext: (config: WorldBorderConfig) => void;
   onBack: () => void;
+  onTabClick?: (tabId: TabId) => void;
 }
 
 const PRESETS: { value: WorldBorderPreset; label: string }[] = [
@@ -20,7 +21,7 @@ const PRESETS: { value: WorldBorderPreset; label: string }[] = [
 
 const MIN_BORDER_SIZE = 500;
 
-export function WorldBorderConfigStep({ onNext, onBack }: WorldBorderConfigProps) {
+export function WorldBorderConfigStep({ onNext, onBack, onTabClick }: WorldBorderConfigProps) {
   const [selected, setSelected] = useState(0);
   const [mode, setMode] = useState<'preset' | 'custom' | 'confirm'>('preset');
   const [customValue, setCustomValue] = useState('');
@@ -87,7 +88,7 @@ export function WorldBorderConfigStep({ onNext, onBack }: WorldBorderConfigProps
 
   if (mode === 'custom') {
     return (
-      <Layout title="granica świata" step={8} totalSteps={10}>
+      <Layout title="granica świata" step={10} totalSteps={12} tab="ustawienia" onTabClick={onTabClick}>
         <Box flexDirection="column" marginTop={2}>
           <Text color="white" bold>Wprowadź własny rozmiar granicy:</Text>
           <Text color="gray">Minimum: {MIN_BORDER_SIZE} bloków</Text>
@@ -112,7 +113,7 @@ export function WorldBorderConfigStep({ onNext, onBack }: WorldBorderConfigProps
 
   if (mode === 'confirm') {
     return (
-      <Layout title="granica świata" step={8} totalSteps={10}>
+      <Layout title="granica świata" step={10} totalSteps={12} tab="ustawienia" onTabClick={onTabClick}>
         <Box flexDirection="column" marginTop={2}>
           <Text color="white" bold>Potwierdź rozmiar granicy:</Text>
           <Box marginTop={1} />
@@ -131,7 +132,7 @@ export function WorldBorderConfigStep({ onNext, onBack }: WorldBorderConfigProps
   }
 
   return (
-    <Layout title="granica świata" step={8} totalSteps={10}>
+    <Layout title="granica świata" step={10} totalSteps={12} tab="ustawienia" onTabClick={onTabClick}>
       <Box flexDirection="column" marginTop={1}>
         <Text color="white" bold>Wybierz rozmiar granicy świata:</Text>
         <Text color="gray">To ogranicza jak daleko gracze mogą podróżować</Text>

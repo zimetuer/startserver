@@ -24,24 +24,22 @@ export function Review({ config, onNext, onBack }: ReviewProps) {
 
   if (confirming) {
     return (
-      <Layout title="potwierdź" step={9} totalSteps={9}>
+      <Layout title="potwierdź" step={12} totalSteps={12} tab="podsumowanie">
         <Box flexDirection="column" marginTop={3} alignItems="center">
           <Text color="yellow" bold>⚠ Wygenerować serwer?</Text>
           <Box marginTop={1} />
           <Text color="gray">Wszystkie pliki zostaną zapisane do:</Text>
           <Text color="cyan">{config.directory}</Text>
           <Box marginTop={2} />
-          <Box flexDirection="row" gap={2}>
-            <Box backgroundColor="green" paddingX={2}><Text color="black" bold>ENTER = Tak</Text></Box>
-            <Box backgroundColor="red" paddingX={2}><Text color="black">ESC = Nie</Text></Box>
-          </Box>
+          <Text color="green" bold>ENTER = Tak</Text>
+          <Text color="red">ESC = Nie</Text>
         </Box>
       </Layout>
     );
   }
 
   return (
-    <Layout title="podsumowanie" step={9} totalSteps={9}>
+    <Layout title="podsumowanie" step={12} totalSteps={12} tab="podsumowanie">
       <Box flexDirection="row" marginTop={1}>
         {/* Left column */}
         <Box flexDirection="column" width={45}>

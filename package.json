@@ -13,8 +13,9 @@
     "README.md"
   ],
   "scripts": {
-    "build": "node build.mjs",
-    "start": "node build.mjs && node dist/index.js",
+    "build:plugin": "node scripts/build-plugin.mjs",
+    "build": "node build.mjs && node scripts/build-plugin.mjs",
+    "start": "node build.mjs && node scripts/build-plugin.mjs && node dist/index.js",
     "postinstall": "node scripts/download-plugin.mjs",
     "test": "vitest run",
     "prepublishOnly": "npm run build"
@@ -36,6 +37,7 @@
     "react": "^18.3.1"
   },
   "devDependencies": {
+    "@types/node": "^25.6.0",
     "@types/react": "^18.3.3",
     "esbuild": "^0.24.0",
     "typescript": "^5.5.0",

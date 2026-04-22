@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
-import { Layout } from '../components/Layout.js';
+import { Layout, type TabId } from '../components/Layout.js';
 
 interface RamConfigProps {
   maxPlayers: number;
   onNext: (ramGb: number) => void;
   onBack: () => void;
+  onTabClick?: (tabId: TabId) => void;
 }
 
-export function RamConfig({ maxPlayers, onNext, onBack }: RamConfigProps) {
+export function RamConfig({ maxPlayers, onNext, onBack, onTabClick }: RamConfigProps) {
   const [value, setValue] = useState('');
   const [error, setError] = useState<string | null>(null);
   const recommended = Math.max(2, Math.ceil(maxPlayers / 10) + 1);
@@ -30,7 +31,7 @@ export function RamConfig({ maxPlayers, onNext, onBack }: RamConfigProps) {
   });
 
   return (
-    <Layout title="przydziel ram" step={8} totalSteps={9}>
+    <Layout title="przydziel ram" step={11} totalSteps={12} tab="ustawienia" onTabClick={onTabClick}>
       <Box flexDirection="column" marginTop={2}>
         <Text color="white" bold>Ile RAM dla serwera?</Text>
         <Box marginTop={1} />

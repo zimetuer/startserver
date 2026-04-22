@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
-import { Layout } from '../components/Layout.js';
+import { Layout, type TabId } from '../components/Layout.js';
 import { access, constants, mkdir } from 'fs/promises';
 
 interface DirectorySelectProps {
   onNext: (directory: string) => void;
+  onTabClick?: (tabId: TabId) => void;
 }
 
-export function DirectorySelect({ onNext }: DirectorySelectProps) {
+export function DirectorySelect({ onNext, onTabClick }: DirectorySelectProps) {
   const [value, setValue] = useState('./server');
   const [error, setError] = useState<string | null>(null);
   const [cursor, setCursor] = useState(value.length);
@@ -52,7 +53,7 @@ export function DirectorySelect({ onNext }: DirectorySelectProps) {
   };
 
   return (
-    <Layout title="wybierz katalog" step={1} totalSteps={9}>
+    <Layout title="wybierz katalog" step={1} totalSteps={12} tab="podstawowe" onTabClick={onTabClick}>
       <Box flexDirection="column" marginTop={2}>
         <Text color="white" bold>Gdzie chcesz utworzyć serwer?</Text>
         <Box marginTop={2} />

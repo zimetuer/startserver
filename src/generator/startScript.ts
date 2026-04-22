@@ -1,7 +1,7 @@
 import type { ServerConfig } from '../types.js';
 
-export function generateStartScript(config: ServerConfig): { sh: string; bat: string } {
-  const jarName = getJarName(config.engine, config.version);
+export function generateStartScript(config: ServerConfig, jarFilename?: string): { sh: string; bat: string } {
+  const jarName = jarFilename || getJarName(config.engine, config.version);
   const ramFlag = `-Xms${config.ramGb}G -Xmx${config.ramGb}G`;
   
   // Linux/Mac optimized flags (useTransparentHugePages works on Linux)
@@ -66,13 +66,6 @@ function getJarName(engine: string, version: string): string {
       return `folia-${version}.jar`;
     case 'purpur':
       return `purpur-${version}.jar`;
-    case 'fabric':
-      return `fabric-server-${version}.jar`;
-    case 'forge':
-      // Forge uses a specific naming convention
-      return `forge-${version}-*.jar`;
-    case 'neoforge':
-      return 'neoforge-*.jar';
     case 'spigot':
       return `spigot-${version}.jar`;
     default:

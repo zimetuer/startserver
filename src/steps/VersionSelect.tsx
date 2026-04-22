@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Text, useInput } from 'ink';
-import { Layout } from '../components/Layout.js';
+import { Layout, type TabId } from '../components/Layout.js';
 import { fetchGameVersions } from '../api/modrinth.js';
 import type { GameVersion } from '../types.js';
 
 interface VersionSelectProps {
   onNext: (version: string) => void;
   onBack: () => void;
+  onTabClick?: (tabId: TabId) => void;
 }
 
-export function VersionSelect({ onNext, onBack }: VersionSelectProps) {
+export function VersionSelect({ onNext, onBack, onTabClick }: VersionSelectProps) {
   const [versions, setVersions] = useState<GameVersion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,7 +50,7 @@ export function VersionSelect({ onNext, onBack }: VersionSelectProps) {
 
   if (loading) {
     return (
-      <Layout title="wybierz wersję" step={2} totalSteps={9}>
+      <Layout title="wybierz wersję" step={2} totalSteps={12} tab="podstawowe" onTabClick={onTabClick}>
         <Box marginTop={2}><Text color="gray">Ładowanie wersji Minecraft...</Text></Box>
       </Layout>
     );
@@ -57,14 +58,14 @@ export function VersionSelect({ onNext, onBack }: VersionSelectProps) {
 
   if (error) {
     return (
-      <Layout title="wybierz wersję" step={2} totalSteps={9}>
+      <Layout title="wybierz wersję" step={2} totalSteps={12} tab="podstawowe" onTabClick={onTabClick}>
         <Box marginTop={2}><Text color="red">Błąd: {error}</Text></Box>
       </Layout>
     );
   }
 
   return (
-    <Layout title="wybierz wersję" step={2} totalSteps={9}>
+    <Layout title="wybierz wersję" step={2} totalSteps={12} tab="podstawowe" onTabClick={onTabClick}>
       <Box flexDirection="column" marginTop={1}>
         <Text color="white" bold>Wybierz wersję Minecraft:</Text>
         <Box marginTop={1} />

@@ -37,19 +37,44 @@ export async function fetchLoaders(): Promise<Loader[]> {
 
 export async function getProjectVersion(
   projectId: string,
-  mcVersion: string
+  mcVersion: string,
+  loader?: string
 ): Promise<ModrinthVersion | null> {
+  const serverLoaders = ['spigot', 'paper', 'bukkit', 'purpur', 'folia'];
+  const loaders = loader ? [loader.toLowerCase()] : serverLoaders;
+
+  const params = new URLSearchParams({
+    game_versions: JSON.stringify([mcVersion]),
+    loaders: JSON.stringify(loaders),
+  });
+
   const versions = await fetchModrinth<ModrinthVersion[]>(
-    `/project/${projectId}/version`
+    `/project/${projectId}/version?${params.toString()}`
   );
-  
-  // Find version compatible with the selected MC version
-  const compatible = versions.find(v => 
-    v.version_number.includes(mcVersion) || 
-    v.project_id === projectId
+
+  if (versions.length === 0) {
+    return null;
+  }
+
+  return versions[0];
+}
+
+export function pickPluginFile(files: Array<{ url: string; filename: string; primary: boolean }>): { url: string; filename: string } | undefined {
+  if (files.length === 0) return undefined;
+  if (files.length === 1) return { url: files[0].url, filename: files[0].filename };
+
+  const bukkittags = ['bukkit', 'spigot', 'paper', 'purpur'];
+  const antitags = ['-sources', '-javadoc', '-api'];
+
+  const preferred = files.find(f =>
+    bukkittags.some(t => f.filename.toLowerCase().includes(t)) &&
+    !antitags.some(t => f.filename.toLowerCase().includes(t))
   );
-  
-  return compatible || versions[0] || null;
+
+  if (preferred) return { url: preferred.url, filename: preferred.filename };
+
+  const primary = files.find(f => f.primary);
+  return { url: (primary ?? files[0]).url, filename: (primary ?? files[0]).filename };
 }
 
 export async function getVersion(versionId: string): Promise<ModrinthVersion> {

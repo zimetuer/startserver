@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
-import { Layout } from '../components/Layout.js';
+import { Layout, type TabId } from '../components/Layout.js';
 import type { VoiceChatConfig } from '../types.js';
 
 interface VoiceChatSelectProps {
   onNext: (config: VoiceChatConfig) => void;
   onBack: () => void;
   onSkip: () => void;
+  onTabClick?: (tabId: TabId) => void;
 }
 
 const options = [
@@ -15,7 +16,7 @@ const options = [
   { id: 'skip', name: 'Pomiń', desc: 'Bez czatu głosowego', color: 'gray' },
 ];
 
-export function VoiceChatSelect({ onNext, onBack, onSkip }: VoiceChatSelectProps) {
+export function VoiceChatSelect({ onNext, onBack, onSkip, onTabClick }: VoiceChatSelectProps) {
   const [selected, setSelected] = useState(0);
 
   useInput((input, key) => {
@@ -29,7 +30,7 @@ export function VoiceChatSelect({ onNext, onBack, onSkip }: VoiceChatSelectProps
   });
 
   return (
-    <Layout title="czat głosowy" step={5} totalSteps={9}>
+    <Layout title="czat głosowy" step={5} totalSteps={12} tab="funkcje" onTabClick={onTabClick}>
       <Box flexDirection="column" marginTop={1}>
         <Text color="white" bold>Dodać czat głosowy do serwera?</Text>
         <Box marginTop={1} />

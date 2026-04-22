@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
-import { Layout } from '../components/Layout.js';
+import { Layout, type TabId } from '../components/Layout.js';
 import type { BedrockConfig } from '../types.js';
 
 interface BedrockSelectProps {
@@ -8,9 +8,10 @@ interface BedrockSelectProps {
   onNext: (config: BedrockConfig) => void;
   onBack: () => void;
   onSkip: () => void;
+  onTabClick?: (tabId: TabId) => void;
 }
 
-export function BedrockSelect({ onlineMode, onNext, onBack, onSkip }: BedrockSelectProps) {
+export function BedrockSelect({ onlineMode, onNext, onBack, onSkip, onTabClick }: BedrockSelectProps) {
   const [selected, setSelected] = useState(0);
   const [confirmed, setConfirmed] = useState(false);
   const [geyser, setGeyser] = useState(true);
@@ -50,7 +51,7 @@ export function BedrockSelect({ onlineMode, onNext, onBack, onSkip }: BedrockSel
 
   if (confirmed) {
     return (
-      <Layout title="konfiguracja bedrock" step={6} totalSteps={9}>
+      <Layout title="konfiguracja bedrock" step={6} totalSteps={12} tab="funkcje" onTabClick={onTabClick}>
         <Box flexDirection="column" marginTop={1}>
           <Text color="white" bold>Skonfiguruj crossplay Bedrock:</Text>
           <Box marginTop={1} />
@@ -76,7 +77,7 @@ export function BedrockSelect({ onlineMode, onNext, onBack, onSkip }: BedrockSel
   }
 
   return (
-    <Layout title="crossplay bedrock" step={6} totalSteps={9}>
+    <Layout title="crossplay bedrock" step={6} totalSteps={12} tab="funkcje" onTabClick={onTabClick}>
       <Box flexDirection="column" marginTop={1}>
         <Text color="white" bold>Włączyć crossplay Bedrock?</Text>
         <Text color="gray">Pozwól graczom Minecraft PE/Windows 10 dołączyć</Text>

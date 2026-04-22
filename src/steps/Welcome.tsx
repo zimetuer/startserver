@@ -12,7 +12,7 @@ export function Welcome({ onNext }: WelcomeProps) {
   });
 
   return (
-    <Layout title="startserver" step={0} totalSteps={9}>
+    <Layout title="startserver" step={0} totalSteps={12}>
       <Box flexDirection="column">
         <Text color="cyan">
 {`   ____  _             _   _                  

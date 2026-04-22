@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Text, useInput } from 'ink';
-import { Layout } from '../components/Layout.js';
-import { getProjectVersion } from '../api/modrinth.js';
+import { Layout, type TabId } from '../components/Layout.js';
+import { getProjectVersion, pickPluginFile } from '../api/modrinth.js';
 import { getPluginsForTemplate, voiceChatPlugins, bedrockPlugins, curatedPlugins } from '../data/pluginPresets.js';
 import type { Plugin, Template, VoiceChatConfig, BedrockConfig } from '../types.js';
 
@@ -16,9 +16,10 @@ interface PluginSelectProps {
   teamsEnabled: boolean;
   onNext: (plugins: Plugin[]) => void;
   onBack: () => void;
+  onTabClick?: (tabId: TabId) => void;
 }
 
-export function PluginSelect({ version, engine, template, voiceChat, bedrock, onNext, onBack }: PluginSelectProps) {
+export function PluginSelect({ version, engine, template, voiceChat, bedrock, onNext, onBack, onTabClick }: PluginSelectProps) {
   const [selectedPlugins, setSelectedPlugins] = useState<Plugin[]>([]);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState<'loading' | 'select' | 'confirm' | 'error'>('loading');
@@ -38,9 +39,9 @@ export function PluginSelect({ version, engine, template, voiceChat, bedrock, on
       
       for (const preset of [...presets, ...voice, ...bedr]) {
         try {
-          const vd = await getProjectVersion(preset.slug, version);
+          const vd = await getProjectVersion(preset.slug, version, engine);
           if (vd) {
-            const file = vd.files.find(f => f.primary) || vd.files[0];
+            const file = pickPluginFile(vd.files);
             if (file) {
               loadedPlugins.push({
                 id: preset.slug, slug: preset.slug, name: preset.name,
@@ -70,9 +71,9 @@ export function PluginSelect({ version, engine, template, voiceChat, bedrock, on
     if (!preset) return null;
     
     try {
-      const vd = await getProjectVersion(preset.slug, version);
+      const vd = await getProjectVersion(preset.slug, version, engine);
       if (vd) {
-        const file = vd.files.find(f => f.primary) || vd.files[0];
+        const file = pickPluginFile(vd.files);
         if (file) {
           return {
             id: preset.slug, slug: preset.slug, name: preset.name,
@@ -138,7 +139,7 @@ export function PluginSelect({ version, engine, template, voiceChat, bedrock, on
 
   if (loading || mode === 'loading') {
     return (
-      <Layout title="pluginy" step={6} totalSteps={10}>
+      <Layout title="pluginy" step={8} totalSteps={12} tab="pluginy" onTabClick={onTabClick}>
         <Box marginTop={2}>
           <Text color="yellow">Ładowanie pluginów...</Text>
         </Box>
@@ -148,7 +149,7 @@ export function PluginSelect({ version, engine, template, voiceChat, bedrock, on
 
   if (mode === 'error') {
     return (
-      <Layout title="błąd" step={6} totalSteps={10}>
+      <Layout title="błąd" step={8} totalSteps={12} tab="pluginy" onTabClick={onTabClick}>
         <Box flexDirection="column" marginTop={2}>
           <Text color="red" bold>✗ Błąd</Text>
           <Box marginTop={1} />
@@ -162,7 +163,7 @@ export function PluginSelect({ version, engine, template, voiceChat, bedrock, on
 
   if (mode === 'confirm') {
     return (
-      <Layout title="potwierdzenie pluginów" step={6} totalSteps={10}>
+      <Layout title="potwierdzenie pluginów" step={8} totalSteps={12} tab="pluginy" onTabClick={onTabClick}>
         <Box flexDirection="column" marginTop={2}>
           <Text color="white" bold>Wybrane Pluginy ({selectedPlugins.length}):</Text>
           <Box marginTop={1} />
@@ -192,7 +193,7 @@ export function PluginSelect({ version, engine, template, voiceChat, bedrock, on
 
   // select mode - show curated list
   return (
-    <Layout title="pluginy" step={6} totalSteps={10}>
+    <Layout title="pluginy" step={8} totalSteps={12} tab="pluginy" onTabClick={onTabClick}>
       <Box flexDirection="column" marginTop={1}>
         <Text color="white" bold>Wybierz dodatkowe pluginy:</Text>
         <Text color="gray">ENTER aby zaznaczyć/odznaczyć</Text>

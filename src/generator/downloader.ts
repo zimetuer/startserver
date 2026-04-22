@@ -122,7 +122,7 @@ export async function copyCustomPlugins(destDir: string, sourceDirs?: string[]):
     try {
       await fs.access(dir);
       const entries = await fs.readdir(dir);
-      const jarFiles = entries.filter(e => e.endsWith('.jar') && !e.startsWith('original-'));
+      const jarFiles = entries.filter(e => e.endsWith('.jar') && !e.startsWith('original-') && !e.includes('-shaded'));
 
       for (const filename of jarFiles) {
         const srcPath = join(dir, filename);
