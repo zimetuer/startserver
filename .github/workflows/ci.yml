@@ -35,3 +35,19 @@ jobs:
         with:
           name: server-additions-plugin
           path: plugin/target/server-additions-2.0.0.jar
+
+  publish:
+    name: Publish to npm
+    needs: build-node
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+      - run: npm publish --access public
