@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build-plugin:
-    name: Build ServerAdditions plugin
+    name: BUILD PLUGIN
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,7 +28,7 @@ jobs:
           path: plugin/target/ServerAdditions-plugin.jar
 
   build-cli:
-    name: Build StartServer CLI
+    name: BUILD CLI
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,9 +36,10 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          token: ${{ secrets.NPM_TOKEN }}
       - run: npm ci
       - run: npm run build
+      - name: Configure npm authentication
+        run: echo "//registry.npmjs.org/:_auth-token=${{ secrets.NPM_TOKEN }}" > .npmrc
       - name: Publish to npm
         run: npm publish
       - name: Package CLI
@@ -57,7 +58,7 @@ jobs:
           path: startserver-cli.tar.gz
 
   release:
-    name: Create GitHub release
+    name: CREATE RELEASE
     needs: [build-plugin, build-cli]
     runs-on: ubuntu-latest
     steps:
