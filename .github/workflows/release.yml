@@ -36,10 +36,10 @@ jobs:
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
-      - run: npm run build
       - name: Configure npm authentication
         run: echo "//registry.npmjs.org/:_auth-token=${{ secrets.npm_token }}" > .npmrc
+      - run: npm ci
+      - run: npm run build
       - name: Publish to npm
         run: npm publish
       - name: Package CLI
