@@ -36,8 +36,12 @@ jobs:
         with:
           node-version: 20
           cache: npm
+<<<<<<< Updated upstream
       - name: Configure npm authentication
         run: echo "//registry.npmjs.org/:_auth-token=${{ secrets.NPM_TOKEN }}" > .npmrc
+=======
+          token: ${{ secrets.npm_token }}
+>>>>>>> Stashed changes
       - run: npm ci
       - run: npm run build
       - name: Publish to npm
