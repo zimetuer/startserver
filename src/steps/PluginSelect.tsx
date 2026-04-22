@@ -32,7 +32,7 @@ export function PluginSelect({ version, engine, template, voiceChat, bedrock, on
     const load = async () => {
       const presets = getPluginsForTemplate(template);
       const voice = voiceChat.enabled && voiceChat.type ? voiceChatPlugins.filter(p => p.slug === voiceChat.type) : [];
-      const bedr = bedrock.enabled ? bedrockPlugins.filter(p => p.slug === 'geyser').concat(bedrock.floodgate ? bedrockPlugins.filter(p => p.slug === 'floodgate') : []) : [];
+      const bedr = bedrock.enabled ? bedrockPlugins : [];
       
       const loadedPlugins: Plugin[] = [];
       const failed: string[] = [];

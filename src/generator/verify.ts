@@ -91,9 +91,7 @@ export async function verifyServerSetup(config: ServerConfig, jarFilename?: stri
 
   if (config.bedrock.enabled) {
     await check(join(dir, 'plugins', 'geyser.jar'), 'Geyser');
-    if (config.bedrock.floodgate) {
-      await check(join(dir, 'plugins', 'floodgate.jar'), 'Floodgate');
-    }
+    await check(join(dir, 'plugins', 'floodgate.jar'), 'Floodgate');
   }
 
   return results;

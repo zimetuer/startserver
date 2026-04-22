@@ -17,8 +17,6 @@ export interface VoiceChatConfig {
 
 export interface BedrockConfig {
   enabled: boolean;
-  geyser: boolean;
-  floodgate: boolean;
 }
 
 export interface CustomItemLimit {

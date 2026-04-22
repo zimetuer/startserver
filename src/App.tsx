@@ -66,7 +66,7 @@ export function App() {
   const handleVoiceChat = (voiceChat: VoiceChatConfig) => { setConfig(p => ({ ...p, voiceChat })); setStep('bedrock'); };
   const handleSkipVoiceChat = () => { setConfig(p => ({ ...p, voiceChat: { enabled: false, type: null } })); setStep('bedrock'); };
   const handleBedrock = (bedrock: BedrockConfig) => { setConfig(p => ({ ...p, bedrock })); setStep('additions'); };
-  const handleSkipBedrock = () => { setConfig(p => ({ ...p, bedrock: { enabled: false, geyser: false, floodgate: false } })); setStep('additions'); };
+  const handleSkipBedrock = () => { setConfig(p => ({ ...p, bedrock: { enabled: false } })); setStep('additions'); };
   const handleAdditions = (additions: CustomAdditionsConfig) => { setConfig(p => ({ ...p, customAdditions: additions })); setStep('plugin'); };
   const handleSkipAdditions = () => {
     setConfig(p => ({ ...p, customAdditions: { 
@@ -156,7 +156,7 @@ export function App() {
       {step === 'plugin' && config.version && config.engine && config.template && (
         <PluginSelect version={config.version} engine={config.engine} template={config.template}
           voiceChat={config.voiceChat ?? { enabled: false, type: null }}
-          bedrock={config.bedrock ?? { enabled: false, geyser: false, floodgate: false }}
+          bedrock={config.bedrock ?? { enabled: false }}
           rtpEnabled={config.rtpEnabled ?? false} homesEnabled={config.homesEnabled ?? false} teamsEnabled={config.teamsEnabled ?? false}
           onNext={handlePlugins} onBack={() => goBack('plugin')} onTabClick={tabClickHandler} />
       )}

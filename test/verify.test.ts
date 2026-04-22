@@ -84,7 +84,7 @@ function makeConfig(overrides: Partial<ServerConfig> = {}): ServerConfig {
     serverName: 'TestServer',
     worldBorder: { overworld: 10000, nether: 10000, end: 10000 },
     voiceChat: { enabled: false, type: null },
-    bedrock: { enabled: false, geyser: false, floodgate: false },
+    bedrock: { enabled: false },
     customAdditions: fullAdditions,
     scoreboardEnabled: true,
     tabEnabled: true,
@@ -266,7 +266,7 @@ describe('verifyServerSetup', () => {
   });
 
   it('checks geyser and floodgate when bedrock enabled', async () => {
-    const config = makeConfig({ bedrock: { enabled: true, geyser: true, floodgate: true } });
+    const config = makeConfig({ bedrock: { enabled: true } });
     writeFileSync(join(TEST_DIR, 'plugins', 'geyser.jar'), 'fake');
     writeFileSync(join(TEST_DIR, 'plugins', 'floodgate.jar'), 'fake');
     const results = await verifyServerSetup(config);
@@ -279,7 +279,7 @@ describe('verifyServerSetup', () => {
   });
 
   it('does not check geyser when bedrock is disabled', async () => {
-    const config = makeConfig({ bedrock: { enabled: false, geyser: false, floodgate: false } });
+    const config = makeConfig({ bedrock: { enabled: false } });
     const results = await verifyServerSetup(config);
     const geyserCheck = results.find(r => r.description === 'Geyser');
     expect(geyserCheck).toBeUndefined();
