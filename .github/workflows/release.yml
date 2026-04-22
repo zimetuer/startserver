@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: write
+  packages: write
 
 jobs:
   build-plugin:
@@ -37,6 +38,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - name: Configure npm authentication
+        run: echo "//registry.npmjs.org/:_auth-token=${{ secrets.npm_token }}" > .npmrc
+      - name: Publish to npm
+        run: npm publish
       - name: Package CLI
         run: |
           mkdir -p package

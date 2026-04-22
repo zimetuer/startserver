@@ -1,6 +1,6 @@
 {
   "name": "@zimetuer/startserver",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Kreator konfiguracji serwera Minecraft TUI",
   "type": "module",
   "main": "dist/index.js",
@@ -8,7 +8,8 @@
     "startserver": "dist/index.js"
   },
   "files": [
-    "dist/",
+    "dist/index.js",
+    "dist/plugin/",
     "scripts/",
     "README.md"
   ],
